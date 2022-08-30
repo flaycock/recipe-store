@@ -13,7 +13,12 @@ const Interface = () => {
 			ingredients: ingredients
 		};
 		console.log('Saving: ', recipe);
-		setStoreMsg('Success in saving.');
+		fetch('http://localhost:3001/store', {
+			method: 'POST',
+			mode: 'cors',
+			body: recipe
+		})
+			.then(res => setStoreMsg('Success in saving.'));
 	}
 
 	const recipeSearch = () => {
@@ -23,10 +28,19 @@ const Interface = () => {
 			method: 'GET',
 			mode: 'cors'
 		})
-			.then(res => console.log(res));
-			//.then(res => res.json())
-			//.then(json => JSON.parse(json))
-			//.then(parsed => console.log(parsed));
+			.then(res => res.text())
+			.then(text => JSON.parse(text))
+			.then(recipes => {
+				console.log(recipes);
+				if (!recipes.length) {
+					console.log('no recipes returned');
+					setSearchMsg('No recipes returned! Try adding some.');
+				} else {
+					console.log('recipes returned: ', recipes);
+					setSearchMsg(recipes[0].title);
+				}
+			});
+
 	}
 
 	return (
