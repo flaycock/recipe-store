@@ -6,9 +6,10 @@ const Interface = () => {
 	const [searchMsg, setSearchMsg] = useState('');
 
 	const storeSend = () => {
-		let title = document.querySelector('#recipeTitle').value;
-		let ingredients = [...document.querySelectorAll('.storeIngredient')].map(element => element.value.toLowerCase()).filter(ingredient => ingredient !== '');
-		let recipe = {
+		setStoreMsg('Storing...');
+		const title = document.querySelector('#recipeTitle').value.replace(' ', '-').toLowerCase();
+		const ingredients = [...document.querySelectorAll('.storeIngredient')].map(element => element.value.replace(' ', '-').toLowerCase()).filter(ingredient => ingredient !== '');
+		const recipe = {
 			title: title,
 			ingredients: ingredients
 		};
@@ -19,13 +20,14 @@ const Interface = () => {
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify(recipe)
 		})
-			.then(res => res.text())
-			.then(text => setStoreMsg(text));
+			.then(res => setStoreMsg('Saved ' + title))
+			.then(document.querySelectorAll('#recipeTitle, .storeIngredient').forEach(input => input.value = ''));
 	}
 
 	const recipeSearch = () => {
-		let ingredients = [...document.querySelectorAll('.searchIngredient')].map(element => element.value.toLowerCase()).filter(ingredient => ingredient !== '');
-		let ingrString = 'search?ingredient=' + ingredients.join('&ingredient=');
+		setSearchMsg('Searching...');
+		const ingredients = [...document.querySelectorAll('.searchIngredient')].map(element => element.value.replace(' ', '-').toLowerCase()).filter(ingredient => ingredient !== '');
+		const ingrString = 'search?ingredient=' + ingredients.join('&ingredient=');
 		fetch(`http://localhost:3001/${ingrString}`, {
 			method: 'GET',
 			mode: 'cors'
@@ -39,7 +41,9 @@ const Interface = () => {
 					setSearchMsg('No recipes returned! Try adding some.');
 				} else {
 					console.log('recipes returned: ', recipes);
-					setSearchMsg(recipes[0].title);
+					let results = [];
+					recipes.forEach(recipe => results.push(recipe.title.replace('-', ' ')));
+					setSearchMsg(results.join(', '));
 				}
 			});
 
