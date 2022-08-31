@@ -7,7 +7,7 @@ const Interface = () => {
 
 	const storeSend = () => {
 		let title = document.querySelector('#recipeTitle').value;
-		let ingredients = [...document.querySelectorAll('.storeIngredient')].map(element => element.value).filter(ingredient => ingredient !== '');
+		let ingredients = [...document.querySelectorAll('.storeIngredient')].map(element => element.value.toLowerCase()).filter(ingredient => ingredient !== '');
 		let recipe = {
 			title: title,
 			ingredients: ingredients
@@ -16,13 +16,15 @@ const Interface = () => {
 		fetch('http://localhost:3001/store', {
 			method: 'POST',
 			mode: 'cors',
-			body: recipe
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify(recipe)
 		})
-			.then(res => setStoreMsg('Success in saving.'));
+			.then(res => res.text())
+			.then(text => setStoreMsg(text));
 	}
 
 	const recipeSearch = () => {
-		let ingredients = [...document.querySelectorAll('.searchIngredient')].map(element => element.value).filter(ingredient => ingredient !== '');
+		let ingredients = [...document.querySelectorAll('.searchIngredient')].map(element => element.value.toLowerCase()).filter(ingredient => ingredient !== '');
 		let ingrString = 'search?ingredient=' + ingredients.join('&ingredient=');
 		fetch(`http://localhost:3001/${ingrString}`, {
 			method: 'GET',

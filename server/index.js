@@ -17,7 +17,12 @@ app.get('/search', cors(), async (req, res) => {
 			fs.readFile('./server/recipes/' + recipe, 'utf-8', (err2, data) => {
 				if (err2) { console.log(err2); return }
 				let parsed = JSON.parse(data);
-				matched.push(parsed);
+				let canMake = true;
+				let reqIngdts = parsed.ingredients;
+				reqIngdts.forEach(ingredient => {
+					if (!ingredients.includes(ingredient)) { canMake = false;  }
+				});
+				if (canMake) { matched.push(parsed); }
 			});
 		});
 	});
@@ -25,8 +30,14 @@ app.get('/search', cors(), async (req, res) => {
 	return res.json(matched);
 });
 
-app.post('/store', cors(), (req, res) => {
-	console.log(JSON.stringify(req.body));
+app.post('/store', cors(), async (req, res) => {
+	let title = req.body.title.replace(' ', '').toLowerCase();
+	let recipe = JSON.stringify(req.body);
+	fs.writeFile(`./server/recipes/${title}.json`, recipe, { flag: 'w' }, err => {
+		if (err) { console.log(err); return }
+	});
+	await new Promise(done => setTimeout(() => done(), 2000));
+	return res.json('Saved.');
 });
 
 app.listen(PORT, () => {
