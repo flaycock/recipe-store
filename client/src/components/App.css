@@ -1,0 +1,16 @@
+h1, h2, h3, h4, h5 {
+	text-align: center;
+}
+.column {
+	float: left;
+	width: 47%;
+	padding: 10px;
+}
+input {
+	width: 100%
+}
+div[class*="Add"] {
+	float: right;
+	text-decoration: underline;
+	cursor: pointer;
+}

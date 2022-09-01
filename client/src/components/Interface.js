@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
-import './Interface.css';
+import Ingredients from './Ingredients.js';
+import './App.css';
 
 const Interface = () => {
 	const [storeMsg, setStoreMsg] = useState('');
@@ -58,23 +59,15 @@ const Interface = () => {
 				<label htmlFor='recipeTitle'>Title</label>&nbsp;
 				<input type='text' id='recipeTitle' />
 				<h5>Ingredients:</h5>
-				<input type='text' className='storeIngredient' /><br />
-				<input type='text' className='storeIngredient' /><br />
-				<input type='text' className='storeIngredient' /><br />
-				<input type='text' className='storeIngredient' /><br />
-				<input type='text' className='storeIngredient' /><br />
+				<Ingredients type='storeIngredient' />
 				<button type='submit' onClick={() => storeSend()}>Submit</button>
 				<div id='storeMsg'>{storeMsg}</div>
 			</div>
 			<div className='column' id='search'>
 				<h4>Search</h4>
 				<h5>Ingredients:</h5>
-        <input type='text' className='searchIngredient' /><br />
-        <input type='text' className='searchIngredient' /><br />
-        <input type='text' className='searchIngredient' /><br />
-        <input type='text' className='searchIngredient' /><br />
-				<input type='text' className='searchIngredient' /><br />
-        <button type='submit' onClick={() => recipeSearch()}>Submit</button>
+        <Ingredients type='searchIngredient' />
+				<button type='submit' onClick={() => recipeSearch()}>Submit</button>
 				<div id='searchMsg'>{searchMsg}</div>
 			</div>
 		</>
