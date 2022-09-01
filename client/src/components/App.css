@@ -1,10 +1,22 @@
 h1, h2, h3, h4, h5 {
 	text-align: center;
 }
-.column {
-	float: left;
-	width: 47%;
-	padding: 10px;
+div.view {
+	width: 50%;
+	margin: auto;
+}
+div#viewSelect {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+span.viewToggle {
+	text-decoration: underline;
+	cursor: pointer;
+}
+span.viewToggle.selected {
+	font-weight: bold;
+	text-decoration: none;
 }
 input {
 	width: 100%
